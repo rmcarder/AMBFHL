@@ -3,14 +3,23 @@
  * Copyright 2013-2019 Start Bootstrap
  * Licensed under MIT (https://github.com/BlackrockDigital/startbootstrap-simple-sidebar/blob/master/LICENSE)
  */
-body {
+
+
+
+body,p {
   overflow-x: hidden;
+  font-family: 'Roboto', sans-serif;
+}
+
+h1,h2,h3,h4,h5,h6{
+  font-family: 'Archivo Black', sans-serif;
 }
 
 .btn-primary {
     color: #fff;
     background-color: #505050;
     border-color: #505050;
+    border-radius: 25px;
 }
 
 .btn-primary:hover {
@@ -18,6 +27,20 @@ body {
     background-color: #989898;
     border-color: #989898;
 }
+
+
+.btn-primary:focus {
+    color: #fff;
+    background-color: #989898;
+    border-color: #989898;
+}
+
+.btn-primary:not(:disabled):not(.disabled).active, .btn-primary:not(:disabled):not(.disabled):active, .show>.btn-primary.dropdown-toggle {
+    color: #fff;
+    background-color: #989898;
+    border-color: #989898;
+}
+
 
 
 .border-right {

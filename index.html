@@ -9,12 +9,67 @@
   <meta name="author" content="">
 
   <title>AMBFHL - Tournament Central</title>
-
+    <script src="js/jquery-3.2.1.min.js"></script>
+    <script src="js/jquery.csv.js"></script>
+    <script src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.10.16/js/dataTables.bootstrap.min.js"></script>
   <!-- Bootstrap core CSS -->
   <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
 
   <!-- Custom styles for this template -->
   <link href="css/simple-sidebar.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Roboto:wght@300&display=swap" rel="stylesheet">
+
+
+ <script type="text/javascript">
+
+      const addRow = (cellsObject, header=false) => {
+          if (!document.getElementsByTagName) return;
+          tabBody = document.getElementsByTagName(header ? "thead" : "tbody").item(0);
+          row = document.createElement("tr");
+          const headers = Object.keys(cellsObject);
+          cells = header ? headers : Object.values(cellsObject);
+
+          cells.forEach((cellContent, idx) => {
+            cell = document.createElement(header ? "th" : "td");
+            let contentNode;
+            if (cellContent.includes('http')) {
+              contentNode = document.createElement('a');
+              contentNode.setAttribute('href', cellContent);
+              linkTextNode = document.createTextNode(headers[idx]);
+              contentNode.appendChild(linkTextNode);
+            } else {
+              contentNode = document.createTextNode(cellContent);
+            }
+            cell.appendChild(contentNode);
+            row.appendChild(cell);
+          });
+
+          tabBody.appendChild(row);
+      }
+
+      const fileLocation = "https://docs.google.com/spreadsheets/d/1hkVB4eg3x_jTpcbxqyRVuGmie4AnrNifczxVdi_wum4/export?format=csv&id=1hkVB4eg3x_jTpcbxqyRVuGmie4AnrNifczxVdi_wum4&gid=1151597840";
+
+      const processData = (data) => {
+        const rows = $.csv.toObjects(data);
+        addRow(rows[0], header=true);
+        rows.forEach((project) => addRow(project, false));
+        $('#projects_table').DataTable({ "order": [[ 3, "asc" ]],paging: false,searching: false, bInfo : false});
+      };
+
+      $(document).ready(() => {
+          $.ajax({
+              type: "GET",
+              url: fileLocation,
+              dataType: "text",
+              success: (data) => { processData(data); }
+           });
+      });
+
+    </script>
+
+
+
 
 </head>
 
@@ -22,16 +77,7 @@
 
   <div class="d-flex" id="wrapper">
 
-    <!-- Sidebar -->
-    <div class="bg-light border-right" id="sidebar-wrapper">
-      <div class="sidebar-heading">Menu </div>
-      <div class="list-group list-group-flush">
-        <a href="#" class="list-group-item list-group-item-action bg-light">Standings</a>
-        <a href="#" class="list-group-item list-group-item-action bg-light">Game Log</a>
-        <a href="#" class="list-group-item list-group-item-action bg-light">Hottness</a>
-      </div>
-    </div>
-    <!-- /#sidebar-wrapper -->
+
 
     <!-- Page Content -->
     <div id="page-content-wrapper">
@@ -64,10 +110,299 @@
       </nav>
 
       <div class="container-fluid">
-        <h1 class="mt-4">2020 Tournament</h1>
+        <h2 class="mt-4">AMBFHL Tournament Central</h2>
         <p>Enter new game scores, view overall standings, and see who Hott who not.</p>
          <p><a href="https://docs.google.com/forms/d/e/1FAIpQLSe0LCP2GSY0ekzsh-nbFWtkUvIfRfBZ4-WhAqqVzL-oH2lp9A/viewform" target="_blank" class="btn btn-primary" role="button">Enter New Score</a></p>
-        <h2>Standings</h2>
+        <h4>4/4 Tournament Information</h4>
+        <p>8pl start time. Tournament format and rules</p>
+        <ul>
+          <li>First 4 rounds are randomized teams and matchups. Schedule is below. These games will have 4 minute periods.</li>
+          <li>Individual players will receive wins/losses and the total number of goals for and against even though the games are 2v2 and 2v1.</li>
+          <li>The top 8 players after the 4 rounds of pool play will enter a single elimination 1v1 bracket. Tiebreakers for top 8 and for seeding is by goal differential. Periods for the bracket are 5 minutes.</li>
+          <li>Half beer/half wine/half shot per goal. Large waters per goal cost $2 each, which will go to the winner of the bracket.</li>
+          <li>Enter all scores into the Google form linked at the top. In addition to the information for this tournament, the scores will start building our All Time Standings. Use Round Robin game type for pool play, Bracket game type for the bracket, and Championship game type for the Championship.</li>
+        </ul>
+        <h5>Pool Play Standings</h5>
+          <div class="row">
+            <div class="col">
+              <table id='projects_table' class="table cell-border table-bordered">
+                  <thead></thead>
+                  <tbody></tbody>
+              </table>        
+            </div>
+          </div>
+        <h5>Schedule</h5>
+
+        <h6>Round 1 - 8:00pm</h6>
+         <div class="table-responsive">
+  <table class="table">
+    <thead>
+      <tr>
+        <th scope="col">Home</th>
+        <th scope="col">H</th>
+        <th scope="col">A</th>
+        <th scope="col">Away</th>
+  
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+    
+        <td>Rich and Bones</td>
+        <td>0</td>
+        <td>0</td>
+        <td>Travis</td>
+    
+      </tr>
+      <tr>
+ 
+        <td>Dtox and Matt</td>
+        <td>0</td>
+        <td>0</td>
+        <td>Kitten and Casey</td>
+
+      </tr>
+      <tr>
+    
+        <td>Kenny and Nick</td>
+        <td>0</td>
+        <td>0</td>
+        <td>TJ and James</td>
+     
+      </tr>
+    </tbody>
+  </table>
+</div>
+        <h6>Round 2 - 8:30pm</h6>
+                 <div class="table-responsive">
+  <table class="table">
+    <thead>
+      <tr>
+        <th scope="col">Home</th>
+        <th scope="col">H</th>
+        <th scope="col">A</th>
+        <th scope="col">Away</th>
+  
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+    
+        <td>Matt and Nick</td>
+        <td>0</td>
+        <td>0</td>
+        <td>Kitten</td>
+    
+      </tr>
+      <tr>
+ 
+        <td>TJ and Kenny</td>
+        <td>0</td>
+        <td>0</td>
+        <td>Travis and James</td>
+
+      </tr>
+      <tr>
+    
+        <td>Bones and Casey</td>
+        <td>0</td>
+        <td>0</td>
+        <td>Rich and Dtox</td>
+     
+      </tr>
+    </tbody>
+  </table>
+</div>
+        <h6>Round 3 - 9:00pm</h6>
+                 <div class="table-responsive">
+  <table class="table">
+    <thead>
+      <tr>
+        <th scope="col">Home</th>
+        <th scope="col">H</th>
+        <th scope="col">A</th>
+        <th scope="col">Away</th>
+  
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+    
+        <td>Casey and Travis</td>
+        <td>0</td>
+        <td>0</td>
+        <td>Nick</td>
+    
+      </tr>
+      <tr>
+ 
+        <td>TJ and Bones</td>
+        <td>0</td>
+        <td>0</td>
+        <td>James and Rich</td>
+
+      </tr>
+      <tr>
+    
+        <td>Kitten and Kenny</td>
+        <td>0</td>
+        <td>0</td>
+        <td>Matt and Dtox</td>
+     
+      </tr>
+    </tbody>
+  </table>
+</div>
+        <h6>Round 4 - 9:30pm</h6>
+                 <div class="table-responsive">
+  <table class="table">
+    <thead>
+      <tr>
+        <th scope="col">Home</th>
+        <th scope="col">H</th>
+        <th scope="col">A</th>
+        <th scope="col">Away</th>
+  
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+    
+        <td>Kenny and Tox</td>
+        <td>0</td>
+        <td>0</td>
+        <td>Bones</td>
+    
+      </tr>
+      <tr>
+ 
+        <td>Casey and Travis</td>
+        <td>0</td>
+        <td>0</td>
+        <td>James and Rich</td>
+
+      </tr>
+      <tr>
+    
+        <td>Matt and Nick</td>
+        <td>0</td>
+        <td>0</td>
+        <td>TJ and Kitten</td>
+     
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+ <h6>Tournament Bracket Round 1! 10:00pm</h6>
+                 <div class="table-responsive">
+  <table class="table">
+    <thead>
+      <tr>
+        <th scope="col">Home</th>
+        <th scope="col">H</th>
+        <th scope="col">A</th>
+        <th scope="col">Away</th>
+  
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+    
+        <td>Seed 1</td>
+        <td>0</td>
+        <td>0</td>
+        <td>Seed 8</td>
+    
+      </tr>
+      <tr>
+ 
+        <td>Seed 2</td>
+        <td>0</td>
+        <td>0</td>
+        <td>Seed 7</td>
+
+      </tr>
+      <tr>
+    
+        <td>Seed 3</td>
+        <td>0</td>
+        <td>0</td>
+        <td>Seed 6</td>
+     
+      </tr>
+        <tr>
+    
+        <td>Seed 4</td>
+        <td>0</td>
+        <td>0</td>
+        <td>Seed 5</td>
+     
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+ <h6>Tournament Bracket Round 2! 10:40pm</h6>
+                 <div class="table-responsive">
+  <table class="table">
+    <thead>
+      <tr>
+        <th scope="col">Home</th>
+        <th scope="col">H</th>
+        <th scope="col">A</th>
+        <th scope="col">Away</th>
+  
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+    
+        <td>Reseeded Winner 1</td>
+        <td>0</td>
+        <td>0</td>
+        <td>Reseeded Winner 4</td>
+    
+      </tr>
+      <tr>
+ 
+        <td>Reseeded Winner 2</td>
+        <td>0</td>
+        <td>0</td>
+        <td>Reseeded Winner 3</td>
+
+      </tr>
+      
+    </tbody>
+  </table>
+</div>
+
+ <h6>CHAMPIONSHIP!!!!</h6>
+                 <div class="table-responsive">
+  <table class="table">
+    <thead>
+      <tr>
+        <th scope="col">Home</th>
+        <th scope="col">H</th>
+        <th scope="col">A</th>
+        <th scope="col">Away</th>
+  
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+    
+        <td>TBD</td>
+        <td>0</td>
+        <td>0</td>
+        <td>TBD</td>
+    
+      </tr>
+    
+      
+    </tbody>
+  </table>
+</div>
       </div>
     </div>
     <!-- /#page-content-wrapper -->
@@ -76,7 +411,7 @@
   <!-- /#wrapper -->
 
   <!-- Bootstrap core JavaScript -->
-  <script src="vendor/jquery/jquery.min.js"></script>
+
   <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
 
   <!-- Menu Toggle Script -->
