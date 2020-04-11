@@ -16,10 +16,6 @@
   <!-- Bootstrap core CSS -->
   <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
 
-
-  <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
-
-
   <!-- Custom styles for this template -->
   <link href="css/simple-sidebar.css" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Roboto:wght@300&display=swap" rel="stylesheet">
@@ -52,13 +48,13 @@
           tabBody.appendChild(row);
       }
 
-      const fileLocation = "https://docs.google.com/spreadsheets/d/1hkVB4eg3x_jTpcbxqyRVuGmie4AnrNifczxVdi_wum4/export?format=csv&id=1hkVB4eg3x_jTpcbxqyRVuGmie4AnrNifczxVdi_wum4&gid=2136847877";
+      const fileLocation = "https://docs.google.com/spreadsheets/d/1hkVB4eg3x_jTpcbxqyRVuGmie4AnrNifczxVdi_wum4/export?format=csv&id=1hkVB4eg3x_jTpcbxqyRVuGmie4AnrNifczxVdi_wum4&gid=1151597840";
 
       const processData = (data) => {
         const rows = $.csv.toObjects(data);
         addRow(rows[0], header=true);
         rows.forEach((project) => addRow(project, false));
-        $('#tourney_table').DataTable({ "order": [[ 3, "asc" ]],paging: false,searching: false, bInfo : false});
+        $('#projects_table').DataTable({ "order": [[ 3, "asc" ]],paging: false,searching: false, bInfo : false});
       };
 
       $(document).ready(() => {
@@ -95,10 +91,10 @@
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
           <ul class="navbar-nav ml-auto mt-2 mt-lg-0">
              <li class="nav-item active">
-              <a class="nav-link" href="index.html">Home <span class="sr-only">(current)</span></a>
+              <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
             </li>
             <li class="nav-item active">
-              <a class="nav-link" href="#">Full Standings/Stats <span class="sr-only">(current)</span></a>
+              <a class="nav-link" href="#">Full Standings and Stats <span class="sr-only">(current)</span></a>
             </li>
                <li class="nav-item active">
                   <a class="nav-link" href="#">Hottness</a>
@@ -107,10 +103,6 @@
               <li class="nav-item active">
                   <a class="nav-link" href="#">Game Log</a>
             </li>
-             <li class="nav-item active">
-                  <a class="nav-link" href="Archive.html">Tournament Archive</a>
-            </li>        
-
            
 
           </ul>
@@ -121,17 +113,19 @@
         <h2 class="mt-4">AMBFHL Tournament Central</h2>
         <p>Enter new game scores, view overall standings, and see who Hott who not.</p>
          <p><a href="https://docs.google.com/forms/d/e/1FAIpQLSe0LCP2GSY0ekzsh-nbFWtkUvIfRfBZ4-WhAqqVzL-oH2lp9A/viewform" target="_blank" class="btn btn-primary" role="button">Enter New Score</a></p>
-        <h4>4/11 Tournament Information</h4>
-        <p>5pm start time. Tournament format and rules TBD:</p>
+        <h4>4/4 Tournament Information</h4>
+        <p>8pm start time. Tournament format and rules:</p>
         <ul>
+          <li>First 4 rounds are randomized teams and matchups. Schedule is below. These games will have 4 minute periods.</li>
+          <li>Individual players will receive wins/losses and the total number of goals for and against even though the games are 2v2 and 2v1.</li>
+          <li>The top 8 players after the 4 rounds of pool play will enter a single elimination 1v1 bracket. Tiebreakers for top 8 and for seeding is by goal differential. Periods for the bracket are 5 minutes.</li>
           <li>Half beer/half wine/half shot per goal. Large waters per goal cost $2 each, which will go to the winner of the bracket.</li>
           <li>Enter all scores into the Google form linked at the top. In addition to the information for this tournament, the scores will start building our All Time Standings. Use Round Robin game type for pool play, Bracket game type for the bracket, and Championship game type for the Championship.</li>
-          <li>1 randoms with a veto for you or other.</li>
         </ul>
         <h5>Pool Play Standings</h5>
           <div class="row">
             <div class="col">
-              <table id='tourney_table' class="table cell-border table-bordered">
+              <table id='projects_table' class="table cell-border table-bordered">
                   <thead></thead>
                   <tbody></tbody>
               </table>        
@@ -139,48 +133,7 @@
           </div>
         <h5>Schedule</h5>
 
-        <h6>Round 1 - 5:00pm</h6>
-         <div class="table-responsive">
-  <table class="table">
-    <thead>
-      <tr>
-        <th scope="col">Zoom</th>
-        <th scope="col">Home</th>
-        <th scope="col">H</th>
-        <th scope="col">A</th>
-        <th scope="col">Away</th>
-  
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a href='https://wpfund.zoom.us/j/736355792'>A</a></td>
-        <td>TBD</td>
-        <td>0</td>
-        <td>0</td>
-        <td>TBD</td>
-    
-      </tr>
-      <tr>
-   <td>HO</td>
-        <td>TBD</td>
-        <td>0</td>
-        <td>0</td>
-        <td>TBD</td>
 
-      </tr>
-      <tr>
-     <td><a href='https://wpfund.zoom.us/j/719902903'>C</a></td>
-        <td>TBD</td>
-        <td>0</td>
-        <td>0</td>
-        <td>TBD</td>
-     
-      </tr>
-    </tbody>
-  </table>
-</div>
-       
       </div>
     </div>
     <!-- /#page-content-wrapper -->
@@ -190,7 +143,7 @@
 
   <!-- Bootstrap core JavaScript -->
 
-
+  <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
 
   <!-- Menu Toggle Script -->
   <script>

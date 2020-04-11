@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="">
+  <meta name="author" content="">
+
+  <title>AMBFHL - Tournament Central</title>
+    <script src="js/jquery-3.2.1.min.js"></script>
+    <script src="js/jquery.csv.js"></script>
+    <script src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.10.16/js/dataTables.bootstrap.min.js"></script>
+  <!-- Bootstrap core CSS -->
+  <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+
+  <!-- Custom styles for this template -->
+  <link href="css/simple-sidebar.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Roboto:wght@300&display=swap" rel="stylesheet">
+
+
+ <script type="text/javascript">
+
+      const addRow = (cellsObject, header=false) => {
+          if (!document.getElementsByTagName) return;
+          tabBody = document.getElementsByTagName(header ? "thead" : "tbody").item(0);
+          row = document.createElement("tr");
+          const headers = Object.keys(cellsObject);
+          cells = header ? headers : Object.values(cellsObject);
+
+          cells.forEach((cellContent, idx) => {
+            cell = document.createElement(header ? "th" : "td");
+            let contentNode;
+            if (cellContent.includes('http')) {
+              contentNode = document.createElement('a');
+              contentNode.setAttribute('href', cellContent);
+              linkTextNode = document.createTextNode(headers[idx]);
+              contentNode.appendChild(linkTextNode);
+            } else {
+              contentNode = document.createTextNode(cellContent);
+            }
+            cell.appendChild(contentNode);
+            row.appendChild(cell);
+          });
+
+          tabBody.appendChild(row);
+      }
+
+      const fileLocation = "https://docs.google.com/spreadsheets/d/1hkVB4eg3x_jTpcbxqyRVuGmie4AnrNifczxVdi_wum4/export?format=csv&id=1hkVB4eg3x_jTpcbxqyRVuGmie4AnrNifczxVdi_wum4&gid=1151597840";
+
+      const processData = (data) => {
+        const rows = $.csv.toObjects(data);
+        addRow(rows[0], header=true);
+        rows.forEach((project) => addRow(project, false));
+        $('#projects_table').DataTable({ "order": [[ 5, "desc" ]],paging: false,searching: false, bInfo : false});
+      };
+
+      $(document).ready(() => {
+          $.ajax({
+              type: "GET",
+              url: fileLocation,
+              dataType: "text",
+              success: (data) => { processData(data); }
+           });
+      });
+
+    </script>
+
+
+
+
+</head>
+
+<body>
+
+  <div class="d-flex" id="wrapper">
+
+
+
+    <!-- Page Content -->
+    <div id="page-content-wrapper">
+
+      <nav class="navbar navbar-expand-lg navbar-light bg-light border-bottom">
+        <img class="icon logo logo-smaller" src="assets/AMBFHL with text outlines.svg" width="250" alt="AMBFHL logo">
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+          <ul class="navbar-nav ml-auto mt-2 mt-lg-0">
+             <li class="nav-item active">
+              <a class="nav-link" href="index.html">Home </a>
+            </li>
+            <li class="nav-item active">
+              <a class="nav-link" href="#">Full Standings/Stats</a>
+            </li>
+               <li class="nav-item active">
+                  <a class="nav-link" href="#">Hottness</a>
+            </li>        
+
+              <li class="nav-item active">
+                  <a class="nav-link" href="#">Game Log</a>
+            </li>
+            </li>
+               <li class="nav-item active">
+                  <a class="nav-link" href="Archive.html">Tournament Archive<span class="sr-only">(current)</span></a>
+            </li>        
+
+
+          </ul>
+        </div>
+      </nav>
+
+      <div class="container-fluid">
+        <h2 class="mt-4">AMBFHL Tournament Archive</h2>
+        <p>A list of previous tournament details and standings</p>
+        <h4>4/4 Tournament Information</h4>
+        <p>8pm start time. Tournament format and rules:</p>
+        <ul>
+          <li>First 4 rounds are randomized teams and matchups. Schedule is below. These games will have 4 minute periods.</li>
+          <li>Individual players will receive wins/losses and the total number of goals for and against even though the games are 2v2 and 2v1.</li>
+          <li>The top 8 players after the 4 rounds of pool play will enter a single elimination 1v1 bracket. Tiebreakers for top 8 and for seeding is by goal differential. Periods for the bracket are 5 minutes.</li>
+          <li>Half beer/half wine/half shot per goal. Large waters per goal cost $2 each, which will go to the winner of the bracket.</li>
+          <li>Enter all scores into the Google form linked at the top. In addition to the information for this tournament, the scores will start building our All Time Standings. Use Round Robin game type for pool play, Bracket game type for the bracket, and Championship game type for the Championship.</li>
+          <li>1 randoms with a veto for you or other.</li>
+        </ul>
+        <h5>Pool Play Standings</h5>
+          <div class="row">
+            <div class="col">
+              <table id='projects_table' class="table cell-border table-bordered">
+                  <thead></thead>
+                  <tbody></tbody>
+              </table>        
+            </div>
+          </div>
+        <h5>Schedule</h5>
+
+        <h6>Round 1 - 8:00pm</h6>
+         <div class="table-responsive">
+  <table class="table">
+    <thead>
+      <tr>
+        <th scope="col">Zoom</th>
+        <th scope="col">Home</th>
+        <th scope="col">H</th>
+        <th scope="col">A</th>
+        <th scope="col">Away</th>
+  
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a href='https://wpfund.zoom.us/j/736355792'>A</a></td>
+        <td>Rich/Bones</td>
+        <td>1</td>
+        <td>4</td>
+        <td>Travis</td>
+    
+      </tr>
+      <tr>
+   <td>HO</td>
+        <td>Dtox/Matt</td>
+        <td>0</td>
+        <td>6</td>
+        <td>Kitten/Casey</td>
+
+      </tr>
+      <tr>
+     <td><a href='https://wpfund.zoom.us/j/719902903'>C</a></td>
+        <td>Kenny/Nick</td>
+        <td>1</td>
+        <td>0</td>
+        <td>TJ/James</td>
+     
+      </tr>
+    </tbody>
+  </table>
+</div>
+        <h6>Round 2 - 8:30pm</h6>
+                 <div class="table-responsive">
+  <table class="table">
+    <thead>
+      <tr>
+               <th scope="col">Zoom</th>
+        <th scope="col">Home</th>
+        <th scope="col">H</th>
+        <th scope="col">A</th>
+        <th scope="col">Away</th>
+  
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+     <td><a href='https://wpfund.zoom.us/j/736355792'>A</a></td>
+        <td>Matt/Nick</td>
+        <td>0</td>
+        <td>5</td>
+        <td>Kitten</td>
+    
+      </tr>
+      <tr>
+<td>HO</td>
+        <td>TJ/Kenny</td>
+        <td>2</td>
+        <td>1</td>
+        <td>Travis/James</td>
+
+      </tr>
+      <tr>
+      <td><a href='https://wpfund.zoom.us/j/719902903'>C</a></td>
+        <td>Bones/Casey</td>
+        <td>7</td>
+        <td>1</td>
+        <td>Rich/Dtox</td>
+     
+      </tr>
+    </tbody>
+  </table>
+</div>
+        <h6>Round 3 - 9:00pm</h6>
+                 <div class="table-responsive">
+  <table class="table">
+    <thead>
+      <tr>
+            <th scope="col">Zoom</th>
+        <th scope="col">Home</th>
+        <th scope="col">H</th>
+        <th scope="col">A</th>
+        <th scope="col">Away</th>
+  
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+     <td><a href='https://wpfund.zoom.us/j/736355792'>A</a>
+        <td>Casey/Travis</td>
+        <td>0</td>
+        <td>3</td>
+        <td>Nick</td>
+    
+      </tr>
+      <tr>
+<td>HO</td>
+        <td>TJ/Bones</td>
+        <td>2</td>
+        <td>1</td>
+        <td>James/Rich</td>
+
+      </tr>
+      <tr>
+     <td><a href='https://wpfund.zoom.us/j/719902903'>C</a></td>
+        <td>Kitten/Kenny</td>
+        <td>2</td>
+        <td>0</td>
+        <td>Matt/Dtox</td>
+     
+      </tr>
+    </tbody>
+  </table>
+</div>
+        <h6>Round 4 - 9:30pm</h6>
+                 <div class="table-responsive">
+  <table class="table">
+    <thead>
+      <tr>
+        <th scope="col">Zoom</th>
+        <th scope="col">Home</th>
+        <th scope="col">H</th>
+        <th scope="col">A</th>
+        <th scope="col">Away</th>
+  
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+     <td><a href='https://wpfund.zoom.us/j/736355792'>A</a>
+        <td>Kenny/Tox</td>
+        <td>2</td>
+        <td>1</td>
+        <td>Bones</td>
+    
+      </tr>
+      <tr>
+<td>HO</td>
+        <td>Casey/Travis</td>
+        <td>6</td>
+        <td>1</td>
+        <td>James/Rich</td>
+
+      </tr>
+      <tr>
+     <td><a href='https://wpfund.zoom.us/j/719902903'>C</a></td>
+        <td>Matt/Nick</td>
+        <td>2</td>
+        <td>4</td>
+        <td>TJ/Kitten</td>
+     
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+ <h6>Tournament Bracket Round 1! 10:00pm</h6>
+                 <div class="table-responsive">
+  <table class="table">
+    <thead>
+      <tr>
+          <th scope="col">Zoom</th>
+        <th scope="col">Home</th>
+        <th scope="col">H</th>
+        <th scope="col">A</th>
+        <th scope="col">Away</th>
+  
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+     <td><a href='https://wpfund.zoom.us/j/736355792'>A</a></td>
+        <td>Seed 1</td>
+        <td>0</td>
+        <td>0</td>
+        <td>Seed 8</td>
+    
+      </tr>
+      <tr>
+<td>HO</td>
+        <td>Seed 2</td>
+        <td>0</td>
+        <td>0</td>
+        <td>Seed 7</td>
+
+      </tr>
+      <tr>
+         <td><a href='https://wpfund.zoom.us/j/719902903'>C</a></td>
+
+        <td>Seed 3</td>
+        <td>0</td>
+        <td>0</td>
+        <td>Seed 6</td>
+     
+      </tr>
+        <tr>
+     <td><a href='https://wpfund.zoom.us/j/358667108'>D</a></td>
+        <td>Seed 4</td>
+        <td>0</td>
+        <td>0</td>
+        <td>Seed 5</td>
+     
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+ <h6>Tournament Bracket Round 2! 10:40pm</h6>
+                 <div class="table-responsive">
+  <table class="table">
+    <thead>
+      <tr>
+          <th scope="col">Zoom</th>
+        <th scope="col">Home</th>
+        <th scope="col">H</th>
+        <th scope="col">A</th>
+        <th scope="col">Away</th>
+  
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+     <td><a href='https://wpfund.zoom.us/j/736355792'>A</a></td>
+        <td>Reseeded Winner 1</td>
+        <td>0</td>
+        <td>0</td>
+        <td>Reseeded Winner 4</td>
+    
+      </tr>
+      <tr>
+<td>HO</td>
+        <td>Reseeded Winner 2</td>
+        <td>0</td>
+        <td>0</td>
+        <td>Reseeded Winner 3</td>
+
+      </tr>
+      
+    </tbody>
+  </table>
+</div>
+
+ <h6>CHAMPIONSHIP!!!! 11:20pm</h6>
+                 <div class="table-responsive">
+  <table class="table">
+    <thead>
+      <tr>
+          <th scope="col">Zoom</th>
+        <th scope="col">Home</th>
+        <th scope="col">H</th>
+        <th scope="col">A</th>
+        <th scope="col">Away</th>
+  
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+     <td><a href='https://wpfund.zoom.us/j/736355792'>A</a></td>
+        <td>TBD</td>
+        <td>0</td>
+        <td>0</td>
+        <td>TBD</td>
+    
+      </tr>
+    
+      
+    </tbody>
+  </table>
+</div>
+      </div>
+    </div>
+    <!-- /#page-content-wrapper -->
+
+  </div>
+  <!-- /#wrapper -->
+
+  <!-- Bootstrap core JavaScript -->
+
+  <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+  <!-- Menu Toggle Script -->
+  <script>
+    $("#menu-toggle").click(function(e) {
+      e.preventDefault();
+      $("#wrapper").toggleClass("toggled");
+    });
+  </script>
+
+</body>
+
+</html>
