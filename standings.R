@@ -49,6 +49,7 @@ nhl_raw<-nhl_raw%>%
 
 games<-nhl_raw%>%
   filter(Timestamp>=as.POSIXct("2020-04-11 12:00:00"))%>%
+  #filter(`Game Type`=="Round Robin")%>%
   group_by(id)%>%
   summarize(Away=paste(Team[side=="Away Team"],collapse=", "),
             AwayScore=first(`Away Score`),
