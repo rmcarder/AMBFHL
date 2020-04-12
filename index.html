@@ -73,6 +73,52 @@
     </script>
 
 
+ <script type="text/javascript">
+
+      const addRow = (cellsObject, header=false) => {
+          if (!document.getElementsByTagName) return;
+          tabBody = document.getElementsByTagName(header ? "thead" : "tbody").item(0);
+          row = document.createElement("tr");
+          const headers = Object.keys(cellsObject);
+          cells = header ? headers : Object.values(cellsObject);
+
+          cells.forEach((cellContent, idx) => {
+            cell = document.createElement(header ? "th" : "td");
+            let contentNode;
+            if (cellContent.includes('http')) {
+              contentNode = document.createElement('a');
+              contentNode.setAttribute('href', cellContent);
+              linkTextNode = document.createTextNode(headers[idx]);
+              contentNode.appendChild(linkTextNode);
+            } else {
+              contentNode = document.createTextNode(cellContent);
+            }
+            cell.appendChild(contentNode);
+            row.appendChild(cell);
+          });
+
+          tabBody.appendChild(row);
+      }
+
+      const fileLocation = "https://docs.google.com/spreadsheets/d/1hkVB4eg3x_jTpcbxqyRVuGmie4AnrNifczxVdi_wum4/export?format=csv&id=1hkVB4eg3x_jTpcbxqyRVuGmie4AnrNifczxVdi_wum4&gid=1850556104";
+
+      const processData = (data) => {
+        const rows = $.csv.toObjects(data);
+        addRow(rows[0], header=true);
+        rows.forEach((project) => addRow(project, false));
+        $('#games_table').DataTable({ "order": [[ 4, "desc" ]],paging: false,searching: false, bInfo : false});
+      };
+
+      $(document).ready(() => {
+          $.ajax({
+              type: "GET",
+              url: fileLocation,
+              dataType: "text",
+              success: (data) => { processData(data); }
+           });
+      });
+
+    </script>
 
 
 </head>
@@ -146,7 +192,10 @@
         <h5>Schedule</h5>
 <h6>Round Robin</h6>
 <p>All teams play each other once with 3 minute periods. Mercy may be called in a 3+ goal game in the third period by the trailing team. Game scores will populate below when entered into the form.</p>
-
+<table id='games_table' class="table cell-border table-bordered">
+                  <thead></thead>
+                  <tbody></tbody>
+              </table>        
         <h6>Bracket Round 1</h6>
          <div class="table-responsive">
   <table class="table">
