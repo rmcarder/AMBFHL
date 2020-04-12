@@ -106,7 +106,7 @@
         const rows = $.csv.toObjects(data);
         addRow(rows[0], header=true);
         rows.forEach((project) => addRow(project, false));
-        $('#games_table').DataTable({ "order": [[ 4, "desc" ]],paging: false,searching: false, bInfo : false});
+        $('#games_table').DataTable({ "order": [[ 5, "desc" ]],paging: false,searching: false, bInfo : false});
       };
 
       $(document).ready(() => {
@@ -168,7 +168,10 @@
         <p>Enter new game scores, view overall standings, and see who Hott who not.</p>
          <p><a href="https://docs.google.com/forms/d/e/1FAIpQLSe0LCP2GSY0ekzsh-nbFWtkUvIfRfBZ4-WhAqqVzL-oH2lp9A/viewform" target="_blank" class="btn btn-primary" role="button">Enter New Score</a></p>
         <h4>4/11 Tournament Information</h4>
-        <p>5pm start time. Tournament format and rules TBD:</p>
+         <h5>Champions: TJ and Travis!</h5>
+        <img src="championship411.png" class="img-fluid" alt="Responsive image">
+        <p> </p>
+        <p>Tournament format and rules:</p>
         <ul>
           <li>2v2 tournament where losers start a 1v1 for redemption.</li>
                     <li>During round robin play, all teams play each other once with 3 minute periods.</li>
