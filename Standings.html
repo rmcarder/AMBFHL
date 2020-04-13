@@ -156,8 +156,8 @@
   <script>
 
 // set the dimensions and margins of the graph
-var margin = {top: 10, right: 30, bottom: 40, left: 70},
-    width = 460 - margin.left - margin.right,
+var margin = {top: 10, right: 30, bottom: 40, left: 80},
+    width = 400 - margin.left - margin.right,
     height = 400 - margin.top - margin.bottom;
 
 // append the svg object to the body of the page
@@ -186,6 +186,7 @@ svg.append("g")
   .call(d3.axisBottom(x))
   .selectAll("text")
     .attr("transform", "translate(-10,0)rotate(-45)")
+     .attr("class", "axis-label")
     .style("text-anchor", "end");
 
 // Y axis
@@ -196,6 +197,7 @@ var y = d3.scaleBand()
 svg.append("g")
   .call(d3.axisLeft(y)) .selectAll("text")
     .attr("transform", "translate(-10,0)")
+        .attr("class", "axis-label")
     .style("text-anchor", "end");
 
 var myColor = d3.scaleSequential(d3.interpolatePiYG).domain([-1,1]);
@@ -253,8 +255,8 @@ svg.selectAll("text")
   .transition()
   .duration(2000)
   .style("opacity",1)
-  .attr("x", function(d) { if (d.UR>0) {return x(d.UR)+20; }
-    else{return x(d.UR)-55;}
+  .attr("x", function(d) { if (d.UR>0) {return x(d.UR)+15; }
+    else{return x(d.UR)-43;}
 
 })
 })

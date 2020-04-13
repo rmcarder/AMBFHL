@@ -33,6 +33,12 @@ h1,h2,h3,h4,h5,h6{
 
 .label{
   font-size: .75em;
+   font-family: 'Roboto', sans-serif;
+}
+
+.axis-label{
+  font-size: 1.2em;
+   font-family: 'Roboto', sans-serif;
 }
 .btn-primary:focus {
     color: #fff;
