@@ -33,9 +33,7 @@ library(tidyverse)
 
 setwd("C:/Users/rcarder/Documents/dev/AMBFHL")
 
-nhl_raw<-read_sheet("https://docs.google.com/spreadsheets/d/1hkVB4eg3x_jTpcbxqyRVuGmie4AnrNifczxVdi_wum4/edit#gid=1609610797")
-
-nhl_raw<-nhl_raw%>%
+nhl_raw<-read_sheet("https://docs.google.com/spreadsheets/d/1hkVB4eg3x_jTpcbxqyRVuGmie4AnrNifczxVdi_wum4/edit#gid=1609610797")%>%
   mutate(id=row_number())%>%
   pivot_longer(cols=starts_with("Teams"),
                names_to="Player",
@@ -44,10 +42,33 @@ nhl_raw<-nhl_raw%>%
   mutate(WL=ifelse(side=="Home Team"&`Home Score`>`Away Score`,"W",
                    ifelse(side=="Home Team"&`Home Score`<`Away Score`,"L",
                           ifelse(side=="Away Team"&`Home Score`<`Away Score`,"W","L" ))))%>%
+  mutate(W=ifelse(WL=="W",1,0),
+         L=ifelse(WL=="L",1,0),
+         OTL=ifelse(WL=="L"&`OT/SO`=="Yes",1,0),
+         GF=ifelse(side=="Home Team",`Home Score`,`Away Score`),
+         GA=ifelse(side=="Home Team",`Away Score`,`Home Score`))%>%
+  mutate(GD=GF-GA)%>%
   mutate(Team=str_replace(Player,"Teams ",""))%>%
-  filter(Timestamp>=as.POSIXct("2020-04-11 12:00:00"))
+  mutate(Team=substring(Team,2))%>%
+  mutate(Team=substring(Team,1,(str_length(Team)-1)))%>%
+  mutate(OTL=ifelse(is.na(OTL),0,OTL))%>%
+  mutate(RawScore=W-L+(.5*OTL)+(GD/10))%>%
+  mutate(mult=ifelse(`Game Type`=="Exhibition",.5,
+                     ifelse(`Game Type`=="Round Robin",1,
+                            ifelse(`Game Type`=="Tournament Bracket"&WL=="W",1.5,
+                                   ifelse(`Game Type`=="Championship"&WL=="W",2,1)))),
+         rating=mult*RawScore)
+  #filter(Timestamp>=as.POSIXct("2020-04-11 12:00:00"))
 
-games<-nhl_raw%>%
+UltimateStandings<-nhl_raw%>%
+  group_by(Team)%>%
+  summarize(W=sum(W),L=sum(L),OL=sum(OTL),GF=sum(GF),GA=sum(GA),GD=sum(GD),Rating=sum(rating))%>%
+  mutate(GP=W+L,
+         Pt=2*W+1*OL,
+         UR=round(Rating/GP,2),
+         offset=ifelse(UR>=0,20,-20))
+
+tourneygames<-nhl_raw%>%
   filter(Timestamp>=as.POSIXct("2020-04-11 12:00:00"))%>%
   #filter(`Game Type`=="Round Robin")%>%
   group_by(id)%>%
@@ -57,7 +78,17 @@ games<-nhl_raw%>%
             Home=paste(Team[side=="Home Team"],collapse=", "),
             OT=first(`OT/SO`))
 
-standings1<-games%>%
+allgames<-nhl_raw%>%
+ # filter(Timestamp>=as.POSIXct("2020-04-11 12:00:00"))%>%
+  #filter(`Game Type`=="Round Robin")%>%
+  group_by(id)%>%
+  summarize(Away=paste(Team[side=="Away Team"],collapse=", "),
+            AwayScore=first(`Away Score`),
+            HomeScore=first(`Home Score`),
+            Home=paste(Team[side=="Home Team"],collapse=", "),
+            OT=first(`OT/SO`))
+
+standings1<-tourneygames%>%
   mutate(homewin=ifelse(HomeScore>AwayScore,1,0),
          homeloss=ifelse(HomeScore<AwayScore,1,0),
          homeotl=ifelse(HomeScore<AwayScore&OT=="Yes",1,0),)%>%
@@ -84,6 +115,8 @@ standings<-bind_rows(standings1,standings2)%>%
 
 write.csv(standings,"standings.csv")
 write.csv(games,"games.csv")
+write.csv(UltimateStandings,"UltimateStandings.csv",row.names = FALSE)
+
 
 write_sheet(games, ss = "https://docs.google.com/spreadsheets/d/1hkVB4eg3x_jTpcbxqyRVuGmie4AnrNifczxVdi_wum4/edit#gid=1910726882", sheet = NULL)
          
