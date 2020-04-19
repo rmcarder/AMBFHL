@@ -37,6 +37,11 @@ library(tidyverse)
 
 setwd("C:/Users/rcarder/Documents/dev/AMBFHL")
 
+hotness<-read_sheet("https://docs.google.com/spreadsheets/d/1jfwFMbRqg6XfOwaC-WQd2naHw4-1J9c-F0FCV-TrAE4/edit#gid=1928466151")%>%
+  rename("Wk4"=2,"Wk5"=3,"Change"=4)%>%
+  mutate(Wk4=sprintf("%.2f", round(Wk4,2)),
+         Wk5=sprintf("%.2f", round(Wk5,2)))
+
 nhl_raw<-read_sheet("https://docs.google.com/spreadsheets/d/1hkVB4eg3x_jTpcbxqyRVuGmie4AnrNifczxVdi_wum4/edit#gid=1609610797")%>%
   mutate(id=row_number())%>%
   pivot_longer(cols=starts_with("Teams"),
@@ -62,7 +67,7 @@ nhl_raw<-read_sheet("https://docs.google.com/spreadsheets/d/1hkVB4eg3x_jTpcbxqyR
                             ifelse(`Game Type`=="Tournament Bracket"&WL=="W",1.5,
                                    ifelse(`Game Type`=="Championship"&WL=="W",2,1)))),
          rating=mult*RawScore)
-  #filter(Timestamp>=as.POSIXct("2020-04-11 12:00:00"))
+  #filter(Timestamp>=as.POSIXct("2020-04-11 12:00:00")
 
 UltimateStandings<-nhl_raw%>%
   group_by(Team)%>%
@@ -72,9 +77,20 @@ UltimateStandings<-nhl_raw%>%
          UR=round(Rating/GP,2),
          offset=ifelse(UR>=0,20,-20))
 
+tourneyStandings<-nhl_raw%>%
+  filter(Timestamp>=as.POSIXct("2020-04-18 12:00:00"))%>%
+  filter(`Game Type`!="Exhibition")%>%
+  group_by(Team)%>%
+  summarize(W=sum(W),L=sum(L),OL=sum(OTL),GF=sum(GF),GA=sum(GA),GD=sum(GD),Rating=sum(rating))%>%
+  mutate(GP=W+L,
+         Pt=2*W+1*OL,
+         UR=round(Rating/GP,2),
+         offset=ifelse(UR>=0,20,-20))
+
+
 tourneygames<-nhl_raw%>%
-  filter(Timestamp>=as.POSIXct("2020-04-11 12:00:00"))%>%
-  #filter(`Game Type`=="Round Robin")%>%
+  filter(Timestamp>=as.POSIXct("2020-04-18 12:00:00"))%>%
+  filter(`Game Type`!="Exhibition")%>%
   group_by(id)%>%
   summarize(Away=paste(Team[side=="Away Team"],collapse=", "),
             AwayScore=first(`Away Score`),
@@ -86,12 +102,21 @@ allgames<-nhl_raw%>%
  # filter(Timestamp>=as.POSIXct("2020-04-11 12:00:00"))%>%
   #filter(`Game Type`=="Round Robin")%>%
   group_by(id)%>%
-  summarize(Away=paste(Team[side=="Away Team"],collapse=", "),
+  summarize(Date=format(first(as.Date(Timestamp)),format="%m-%d"),
+            Away=paste(Team[side=="Away Team"],collapse=", "),
             A=first(`Away Score`),
             H=first(`Home Score`),
             Home=paste(Team[side=="Home Team"],collapse=", "),
             OT=first(`OT/SO`),
-            Date=first(as.Date(Timestamp)))
+            Type=first(`Game Type`))
+
+lubridate::mdy("2020-04-18")
+displaygames<-allgames%>%
+  arrange(desc(Date))%>%
+  mutate(otstring=ifelse(OT=="Yes","(OT)"," "))%>%
+ mutate(otstring=replace(otstring,is.na(otstring),''),
+        Home=paste(Home,otstring))%>%
+  dplyr::select(2,3,4,5,6,8)
 
 standings1<-tourneygames%>%
   mutate(homewin=ifelse(HomeScore>AwayScore,1,0),
@@ -103,7 +128,7 @@ standings1<-tourneygames%>%
   dplyr::rename("Team"=1)%>%
   mutate(OTL=ifelse(is.na(OTL),0,OTL))
 
-standings2<-games%>%
+standings2<-tourneygames%>%
   mutate(awaywin=ifelse(HomeScore<AwayScore,1,0),
          awayloss=ifelse(HomeScore>AwayScore,1,0),
          awayotl=ifelse(HomeScore>AwayScore&OT=="Yes",1,0))%>%
@@ -119,13 +144,18 @@ standings<-bind_rows(standings1,standings2)%>%
   mutate(Pts=(W*2)+OTL)
 
 write.csv(standings,"standings.csv")
-write.csv(games,"games.csv")
+
 
 DisplayStandings<-UltimateStandings%>%
   dplyr::select(1,2,3,4,7,10,11)
 
+tourneyStandings<-tourneyStandings%>%
+  dplyr::select(1,2,3,4,7,10)
+
 write.csv(DisplayStandings,"UltimateStandings.csv",row.names = FALSE)
+write.csv(hotness,"hotness.csv",row.names = FALSE)
 
 ?write_sheet
-write_sheet(DisplayStandings, ss = "https://docs.google.com/spreadsheets/d/1hkVB4eg3x_jTpcbxqyRVuGmie4AnrNifczxVdi_wum4/edit#gid=1188732431", sheet = NULL)
-         
+write_sheet(DisplayStandings, ss = "https://docs.google.com/spreadsheets/d/1hkVB4eg3x_jTpcbxqyRVuGmie4AnrNifczxVdi_wum4/edit#gid=1188732431", sheet = "DisplayStandings")
+write_sheet(displaygames, ss = "https://docs.google.com/spreadsheets/d/1hkVB4eg3x_jTpcbxqyRVuGmie4AnrNifczxVdi_wum4/edit#gid=1188732431", sheet = "displaygames")
+write_sheet(tourneyStandings, ss = "https://docs.google.com/spreadsheets/d/1hkVB4eg3x_jTpcbxqyRVuGmie4AnrNifczxVdi_wum4/edit#gid=1188732431", sheet = "tourneystandings")
