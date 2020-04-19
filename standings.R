@@ -11,6 +11,10 @@ output: html_document
   #install.packages("formattable")
   #install.packages("htmltools")
   #install.packages("geojsonio")
+  install.packages("curl")
+install.packages("digest")
+  
+  devtools::install_github("tidyverse/googlesheets4")
 library(googlesheets4)
 library(formattable)
 library(kableExtra)
@@ -83,10 +87,11 @@ allgames<-nhl_raw%>%
   #filter(`Game Type`=="Round Robin")%>%
   group_by(id)%>%
   summarize(Away=paste(Team[side=="Away Team"],collapse=", "),
-            AwayScore=first(`Away Score`),
-            HomeScore=first(`Home Score`),
+            A=first(`Away Score`),
+            H=first(`Home Score`),
             Home=paste(Team[side=="Home Team"],collapse=", "),
-            OT=first(`OT/SO`))
+            OT=first(`OT/SO`),
+            Date=first(as.Date(Timestamp)))
 
 standings1<-tourneygames%>%
   mutate(homewin=ifelse(HomeScore>AwayScore,1,0),
@@ -115,8 +120,12 @@ standings<-bind_rows(standings1,standings2)%>%
 
 write.csv(standings,"standings.csv")
 write.csv(games,"games.csv")
-write.csv(UltimateStandings,"UltimateStandings.csv",row.names = FALSE)
 
+DisplayStandings<-UltimateStandings%>%
+  dplyr::select(1,2,3,4,7,10,11)
 
-write_sheet(games, ss = "https://docs.google.com/spreadsheets/d/1hkVB4eg3x_jTpcbxqyRVuGmie4AnrNifczxVdi_wum4/edit#gid=1910726882", sheet = NULL)
+write.csv(DisplayStandings,"UltimateStandings.csv",row.names = FALSE)
+
+?write_sheet
+write_sheet(DisplayStandings, ss = "https://docs.google.com/spreadsheets/d/1hkVB4eg3x_jTpcbxqyRVuGmie4AnrNifczxVdi_wum4/edit#gid=1188732431", sheet = NULL)
          

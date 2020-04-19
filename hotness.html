@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
 
   <meta charset="utf-8">
@@ -13,8 +12,13 @@
 
     <script src="js/jquery-3.2.1.min.js"></script>
     <script src="js/jquery.csv.js"></script>
-    <script src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
-    <script src="https://cdn.datatables.net/1.10.16/js/dataTables.bootstrap.min.js"></script>
+    <script src="https://d3js.org/d3-color.v1.min.js"></script>
+<script src="https://d3js.org/d3-interpolate.v1.min.js"></script>
+<script src="https://d3js.org/d3-scale-chromatic.v1.min.js"></script>
+      <script src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.10.20/js/dataTables.bootstrap4.min.js"></script>
+    <script src="https://d3js.org/d3.v4.js"></script>
+
   <!-- Bootstrap core CSS -->
   <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
 
@@ -49,13 +53,13 @@
           tabBody.appendChild(row);
       }
 
-      const fileLocation = "https://docs.google.com/spreadsheets/d/1hkVB4eg3x_jTpcbxqyRVuGmie4AnrNifczxVdi_wum4/export?format=csv&id=1hkVB4eg3x_jTpcbxqyRVuGmie4AnrNifczxVdi_wum4&gid=1151597840";
+      const fileLocation = "https://docs.google.com/spreadsheets/d/1jfwFMbRqg6XfOwaC-WQd2naHw4-1J9c-F0FCV-TrAE4/export?format=csv&id=1jfwFMbRqg6XfOwaC-WQd2naHw4-1J9c-F0FCV-TrAE4&gid=1928466151";
 
       const processData = (data) => {
         const rows = $.csv.toObjects(data);
         addRow(rows[0], header=true);
         rows.forEach((project) => addRow(project, false));
-        $('#projects_table').DataTable({ "order": [[ 3, "asc" ]],paging: false,searching: false, bInfo : false});
+        $('#hotness_table').DataTable({ "order": [[ 6, "desc" ]],paging: false,searching: false, bInfo : false});
       };
 
       $(document).ready(() => {
@@ -84,7 +88,7 @@
     <div id="page-content-wrapper">
 
       <nav class="navbar navbar-expand-lg navbar-light bg-light border-bottom">
-        <img class="icon logo logo-smaller" src="assets/AMBFHL with text outlines.svg" width="250" alt="AMBFHL logo">
+       <a href="index.html"><img class="icon logo logo-smaller" src="assets/AMBFHL with text outlines.svg" width="250" alt="AMBFHL logo"></a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
           <span class="navbar-toggler-icon"></span>
         </button>
@@ -92,49 +96,46 @@
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
           <ul class="navbar-nav ml-auto mt-2 mt-lg-0">
              <li class="nav-item active">
-              <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
+              <a class="nav-link" href="index.html">Home </a>
             </li>
             <li class="nav-item active">
-              <a class="nav-link" href="#">Full Standings and Stats <span class="sr-only">(current)</span></a>
+              <a class="nav-link" href="Standings.html">Full Standings/Stats</a>
             </li>
                <li class="nav-item active">
-                  <a class="nav-link" href="#">Hottness</a>
+                  <a class="nav-link" href="hotness.html">Hottness</a>
             </li>        
 
               <li class="nav-item active">
-                  <a class="nav-link" href="#">Game Log</a>
+                   <a class="nav-link" href="gamelog.html">Game Log</a>
             </li>
-           
+            </li>
+               <li class="nav-item active">
+                  <a class="nav-link" href="Archive.html">Tournament Archive<span class="sr-only">(current)</span></a>
+            </li>        
+
 
           </ul>
         </div>
       </nav>
 
       <div class="container-fluid">
-        <h2 class="mt-4">AMBFHL Tournament Central</h2>
-        <p>Enter new game scores, view overall standings, and see who Hott who not.</p>
-         <p><a href="https://docs.google.com/forms/d/e/1FAIpQLSe0LCP2GSY0ekzsh-nbFWtkUvIfRfBZ4-WhAqqVzL-oH2lp9A/viewform" target="_blank" class="btn btn-primary" role="button">Enter New Score</a></p>
-        <h4>4/4 Tournament Information</h4>
-        <p>8pm start time. Tournament format and rules:</p>
-        <ul>
-          <li>First 4 rounds are randomized teams and matchups. Schedule is below. These games will have 4 minute periods.</li>
-          <li>Individual players will receive wins/losses and the total number of goals for and against even though the games are 2v2 and 2v1.</li>
-          <li>The top 8 players after the 4 rounds of pool play will enter a single elimination 1v1 bracket. Tiebreakers for top 8 and for seeding is by goal differential. Periods for the bracket are 5 minutes.</li>
-          <li>Half beer/half wine/half shot per goal. Large waters per goal cost $2 each, which will go to the winner of the bracket.</li>
-          <li>Enter all scores into the Google form linked at the top. In addition to the information for this tournament, the scores will start building our All Time Standings. Use Round Robin game type for pool play, Bracket game type for the bracket, and Championship game type for the Championship.</li>
-        </ul>
-        <h5>Pool Play Standings</h5>
+        <h2 class="mt-4">HOTTNESS</h2>
+         <p>Who HOTT. Who not. You hot?</p>
+
+        <div id="my_dataviz"></div>
+
+ 
+  
+        <h5>Hotness Rankings</h5>
           <div class="row">
             <div class="col">
-              <table id='projects_table' class="table cell-border table-bordered">
+              <table id='hotness_table' class="table cell-border table-bordered">
                   <thead></thead>
                   <tbody></tbody>
               </table>        
             </div>
           </div>
-        <h5>Schedule</h5>
-
-
+       
       </div>
     </div>
     <!-- /#page-content-wrapper -->
@@ -145,6 +146,119 @@
   <!-- Bootstrap core JavaScript -->
 
   <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+  <script>
+
+// set the dimensions and margins of the graph
+var margin = {top: 10, right: 30, bottom: 40, left: 80},
+    width = 400 - margin.left - margin.right,
+    height = 350 - margin.top - margin.bottom;
+
+// append the svg object to the body of the page
+var svg = d3.select("#my_dataviz")
+  .append("svg")
+    .attr("width", width + margin.left + margin.right)
+    .attr("height", height + margin.top + margin.bottom)
+  .append("g")
+    .attr("transform",
+          "translate(" + margin.left + "," + margin.top + ")");
+
+// Parse the Data
+d3.csv("hotness.csv", function(data) {
+
+// sort data
+data.sort(function(b, a) {
+  return b.Wk5 - a.Wk5;
+});
+
+// Add X axis
+var x = d3.scaleLinear()
+  .domain([0, 13])
+  .range([ 0, width]);
+svg.append("g")
+  .attr("transform", "translate(0," + height + ")")
+  .call(d3.axisBottom(x))
+  .selectAll("text")
+    .attr("transform", "translate(-10,0)rotate(-45)")
+     .attr("class", "axis-label")
+    .style("text-anchor", "end");
+
+// Y axis
+var y = d3.scaleBand()
+  .range([ 0, height ])
+  .domain(data.map(function(d) { return d.Name; }))
+  .padding(1);
+svg.append("g")
+  .call(d3.axisLeft(y)) .selectAll("text")
+    .attr("transform", "translate(-10,0)")
+        .attr("class", "axis-label")
+    .style("text-anchor", "end");
+
+var myColor = d3.scaleSequential(d3.interpolateInferno).domain([12,1]);
+
+// Lines
+svg.selectAll("myline")
+  .data(data)
+  .enter()
+  .append("line")
+    .attr("class","lollipop")
+    .attr("x1", function(d) { return x(d.Wk4); })
+    .attr("x2", function(d) { return x(d.Wk4); })
+    .attr("y1", function(d) { return y(d.Name); })
+    .attr("y2", function(d) { return y(d.Name); })
+    .attr("stroke", "grey")
+
+
+
+// Circles -> start at X=0
+svg.selectAll("mycircle")
+  .data(data)
+  .enter()
+  .append("circle")
+    .attr("cx", function(d) { return x(d.Wk4); })
+    .attr("cy", function(d) { return y(d.Name); })
+    .attr("r", "10")
+    .style("fill", "#fff")
+    .attr("stroke", "black")
+
+
+  // Circles -> start at X=0
+svg.selectAll("mylabels")
+  .data(data)
+  .enter()
+  .append("text")
+    .attr("x", function(d) { return x(d.Wk4); })
+    .attr("y", function(d) { return y(d.Name)+5; })
+    .attr("class","label")
+    .style("opacity",0)
+    .text(function(d) { return d.Wk5; }); 
+  
+
+// Change the X coordinates of line and circle
+svg.selectAll("circle")
+  .transition()
+  .duration(2000)
+  .attr("cx", function(d) { return x(d.Wk5); })
+  .style("fill", function(d){return myColor(d.Wk5);})
+
+svg.selectAll(".lollipop")
+  .transition()
+  .duration(2000)
+  .attr("x1", function(d) { return x(d.Wk5); })
+  //.attr("stroke", function(d) { if (d.Change<0) {return "red"; }
+  //  else{return "green";}
+
+svg.selectAll("text")
+  .transition()
+  .duration(2000)
+  .style("opacity",1)
+  .attr("x", function(d) { if (d.Change<0) {return x(d.Wk5)+15; }
+    else{return x(d.Wk5)-36;}
+
+})
+})
+
+</script>
 
   <!-- Menu Toggle Script -->
   <script>
