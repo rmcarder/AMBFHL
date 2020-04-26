@@ -15,6 +15,8 @@
     <script src="https://d3js.org/d3-color.v1.min.js"></script>
 <script src="https://d3js.org/d3-interpolate.v1.min.js"></script>
 <script src="https://d3js.org/d3-scale-chromatic.v1.min.js"></script>
+<script src="https://unpkg.com/d3-simple-slider"></script>
+
       <script src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js"></script>
     <script src="https://cdn.datatables.net/1.10.20/js/dataTables.bootstrap4.min.js"></script>
     <script src="https://d3js.org/d3.v4.js"></script>
@@ -120,7 +122,7 @@
 
       <div class="container-fluid">
         <h2 class="mt-4">AMBFHL Ultimate Standings</h2>
-
+         
         <div id="my_dataviz"></div>
 
         <p>All game data is included. URank is calculated as:</p>
@@ -173,6 +175,9 @@ var svg = d3.select("#my_dataviz")
 // Parse the Data
 d3.csv("UltimateStandings.csv", function(data) {
 
+ data.forEach(function(d) {
+    d.UR = +d.UR;
+  });
 // sort data
 data.sort(function(b, a) {
   return a.UR - b.UR;
@@ -269,7 +274,41 @@ svg.selectAll("text")
     else{return x(d.UR)-43;}
 
 })
+
+
+   var sliderRange = d3
+    .sliderBottom()
+    .min(d3.min(data, function(d) { return d.UR; }))
+    .max(d3.max(data, function(d) { return d.UR; }))
+    .width(300)
+   // .tickFormat(d3.format('.2%'))
+    .ticks(5)
+    .default([d3.min(data, function(d) { return d.UR; }), d3.max(data, function(d) { return d.UR; })])
+    .fill('#2196f3')
+    .on('onchange', val => {
+      d3.select('p#value-range').text(val.map(d3.format('.2')).join('-'));
+    });
+
+  var gRange = d3
+    .select('div#slider-range')
+    .append('svg')
+    .attr('width', 500)
+    .attr('height', 100)
+    .append('g')
+    .attr('transform', 'translate(30,30)');
+
+  gRange.call(sliderRange);
+
+  d3.select('p#value-range').text(
+    sliderRange
+      .value()
+      .map(d3.format('.2'))
+      .join('-')
+  );
 })
+
+
+
 
 </script>
 

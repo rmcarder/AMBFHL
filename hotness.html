@@ -168,7 +168,7 @@ d3.csv("hotness.csv", function(data) {
 
 // sort data
 data.sort(function(b, a) {
-  return b.Wk5 - a.Wk5;
+  return b.Wk6 - a.Wk6;
 });
 
 // Add X axis
@@ -194,7 +194,8 @@ svg.append("g")
         .attr("class", "axis-label")
     .style("text-anchor", "end");
 
-var myColor = d3.scaleSequential(d3.interpolateInferno).domain([12,1]);
+var myColor = d3.scaleSequential(d3.interpolatePlasma).domain([12,1]);
+var lineColor = d3.scaleSequential(d3.interpolateRdYlGn).domain([-3,3]);
 
 // Lines
 svg.selectAll("myline")
@@ -202,8 +203,8 @@ svg.selectAll("myline")
   .enter()
   .append("line")
     .attr("class","lollipop")
-    .attr("x1", function(d) { return x(d.Wk4); })
-    .attr("x2", function(d) { return x(d.Wk4); })
+    .attr("x1", function(d) { return x(d.Wk5); })
+    .attr("x2", function(d) { return x(d.Wk5); })
     .attr("y1", function(d) { return y(d.Name); })
     .attr("y2", function(d) { return y(d.Name); })
     .attr("stroke", "grey")
@@ -215,7 +216,7 @@ svg.selectAll("mycircle")
   .data(data)
   .enter()
   .append("circle")
-    .attr("cx", function(d) { return x(d.Wk4); })
+    .attr("cx", function(d) { return x(d.Wk5); })
     .attr("cy", function(d) { return y(d.Name); })
     .attr("r", "10")
     .style("fill", "#fff")
@@ -227,36 +228,45 @@ svg.selectAll("mylabels")
   .data(data)
   .enter()
   .append("text")
-    .attr("x", function(d) { return x(d.Wk4); })
+    .attr("x", function(d) { return x(d.Wk5); })
     .attr("y", function(d) { return y(d.Name)+5; })
     .attr("class","label")
     .style("opacity",0)
-    .text(function(d) { return d.Wk5; }); 
+    .text(function(d) { return d.Wk6; }); 
   
 
 // Change the X coordinates of line and circle
 svg.selectAll("circle")
   .transition()
   .duration(2000)
-  .attr("cx", function(d) { return x(d.Wk5); })
-  .style("fill", function(d){return myColor(d.Wk5);})
+  .attr("cx", function(d) { return x(d.Wk6); })
+  .style("fill", function(d){return myColor(d.Wk6);})
 
 svg.selectAll(".lollipop")
   .transition()
   .duration(2000)
-  .attr("x1", function(d) { return x(d.Wk5); })
-  //.attr("stroke", function(d) { if (d.Change<0) {return "red"; }
-  //  else{return "green";}
+  .attr("x1", function(d) { return x(d.Wk6); })
+  .attr("stroke", function(d) { return lineColor(d.Change); })
 
 svg.selectAll("text")
   .transition()
   .duration(2000)
   .style("opacity",1)
-  .attr("x", function(d) { if (d.Change<0) {return x(d.Wk5)+15; }
-    else{return x(d.Wk5)-36;}
+  .attr("x", function(d) { if (d.Change<0) {return x(d.Wk6)+15; }
+    else{return x(d.Wk6)-36;}
 
 })
 })
+
+
+
+
+
+
+
+
+
+
 
 </script>
 

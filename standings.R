@@ -150,7 +150,7 @@ DisplayStandings<-UltimateStandings%>%
   dplyr::select(1,2,3,4,7,10,11)
 
 tourneyStandings<-tourneyStandings%>%
-  dplyr::select(1,2,3,4,7,10)
+  dplyr::select(1,2,3,4,7,10,11)
 
 write.csv(DisplayStandings,"UltimateStandings.csv",row.names = FALSE)
 write.csv(hotness,"hotness.csv",row.names = FALSE)
