@@ -38,9 +38,9 @@ library(tidyverse)
 setwd("C:/Users/rcarder/Documents/dev/AMBFHL")
 
 hotness<-read_sheet("https://docs.google.com/spreadsheets/d/1jfwFMbRqg6XfOwaC-WQd2naHw4-1J9c-F0FCV-TrAE4/edit#gid=1928466151")%>%
-  rename("Wk4"=2,"Wk5"=3,"Change"=4)%>%
-  mutate(Wk4=sprintf("%.2f", round(Wk4,2)),
-         Wk5=sprintf("%.2f", round(Wk5,2)))
+  dplyr::rename("Wk5"=3,"Wk6"=5,"Change"=6)%>%
+  mutate(Wk5=sprintf("%.2f", round(Wk5,2)),
+         Wk6=sprintf("%.2f", round(Wk6,2)))
 
 nhl_raw<-read_sheet("https://docs.google.com/spreadsheets/d/1hkVB4eg3x_jTpcbxqyRVuGmie4AnrNifczxVdi_wum4/edit#gid=1609610797")%>%
   mutate(id=row_number())%>%
@@ -78,7 +78,7 @@ UltimateStandings<-nhl_raw%>%
          offset=ifelse(UR>=0,20,-20))
 
 tourneyStandings<-nhl_raw%>%
-  filter(Timestamp>=as.POSIXct("2020-04-18 12:00:00"))%>%
+  filter(Timestamp>=as.POSIXct("2020-04-25 12:00:00"))%>%
   filter(`Game Type`!="Exhibition")%>%
   group_by(Team)%>%
   summarize(W=sum(W),L=sum(L),OL=sum(OTL),GF=sum(GF),GA=sum(GA),GD=sum(GD),Rating=sum(rating))%>%
@@ -89,7 +89,7 @@ tourneyStandings<-nhl_raw%>%
 
 
 tourneygames<-nhl_raw%>%
-  filter(Timestamp>=as.POSIXct("2020-04-18 12:00:00"))%>%
+  filter(Timestamp>=as.POSIXct("2020-04-25 12:00:00"))%>%
   filter(`Game Type`!="Exhibition")%>%
   group_by(id)%>%
   summarize(Away=paste(Team[side=="Away Team"],collapse=", "),
@@ -110,7 +110,7 @@ allgames<-nhl_raw%>%
             OT=first(`OT/SO`),
             Type=first(`Game Type`))
 
-lubridate::mdy("2020-04-18")
+lubridate::mdy("2020-04-25")
 displaygames<-allgames%>%
   arrange(desc(Date))%>%
   mutate(otstring=ifelse(OT=="Yes","(OT)"," "))%>%
