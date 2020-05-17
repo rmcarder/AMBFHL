@@ -1,5 +1,5 @@
 ---
-  title: "Gather EP Related ACS Data"
+  title: "NHL Standings"
 author: "Rich Carder"
 date: "February 13, 2020"
 output: html_document
@@ -36,6 +36,8 @@ library(tidyverse)
 #
 
 setwd("C:/Users/rcarder/Documents/dev/AMBFHL")
+
+tourneydate<-"2020-05-02 12:00:00"
 
 hotness<-read_sheet("https://docs.google.com/spreadsheets/d/1jfwFMbRqg6XfOwaC-WQd2naHw4-1J9c-F0FCV-TrAE4/edit#gid=1928466151")%>%
   dplyr::rename("Wk5"=3,"Wk6"=5,"Change"=6)%>%
@@ -78,7 +80,7 @@ UltimateStandings<-nhl_raw%>%
          offset=ifelse(UR>=0,20,-20))
 
 tourneyStandings<-nhl_raw%>%
-  filter(Timestamp>=as.POSIXct("2020-04-25 12:00:00"))%>%
+  filter(Timestamp>=as.POSIXct(tourneydate))%>%
   filter(`Game Type`!="Exhibition")%>%
   group_by(Team)%>%
   summarize(W=sum(W),L=sum(L),OL=sum(OTL),GF=sum(GF),GA=sum(GA),GD=sum(GD),Rating=sum(rating))%>%
@@ -89,7 +91,7 @@ tourneyStandings<-nhl_raw%>%
 
 
 tourneygames<-nhl_raw%>%
-  filter(Timestamp>=as.POSIXct("2020-04-25 12:00:00"))%>%
+  filter(Timestamp>=as.POSIXct(tourneydate))%>%
   filter(`Game Type`!="Exhibition")%>%
   group_by(id)%>%
   summarize(Away=paste(Team[side=="Away Team"],collapse=", "),
@@ -110,7 +112,6 @@ allgames<-nhl_raw%>%
             OT=first(`OT/SO`),
             Type=first(`Game Type`))
 
-lubridate::mdy("2020-04-25")
 displaygames<-allgames%>%
   arrange(desc(Date))%>%
   mutate(otstring=ifelse(OT=="Yes","(OT)"," "))%>%
