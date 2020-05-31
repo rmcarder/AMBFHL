@@ -37,7 +37,7 @@ library(tidyverse)
 
 setwd("C:/Users/rcarder/Documents/dev/AMBFHL")
 
-tourneydate<-"2020-05-02 12:00:00"
+tourneydate<-"2020-05-16 12:00:00"
 
 hotness<-read_sheet("https://docs.google.com/spreadsheets/d/1jfwFMbRqg6XfOwaC-WQd2naHw4-1J9c-F0FCV-TrAE4/edit#gid=1928466151")%>%
   dplyr::rename("Wk5"=3,"Wk6"=5,"Change"=6)%>%
