@@ -3,8 +3,59 @@
  * Copyright 2013-2019 Start Bootstrap
  * Licensed under MIT (https://github.com/BlackrockDigital/startbootstrap-simple-sidebar/blob/master/LICENSE)
  */
-body {
+
+
+
+body,p {
   overflow-x: hidden;
+  font-family: 'Roboto', sans-serif;
+}
+
+h1,h2,h3,h4,h5,h6{
+  font-family: 'Archivo Black', sans-serif;
+}
+
+.btn-primary {
+    color: #fff;
+    background-color: #505050;
+    border-color: #505050;
+    border-radius: 25px;
+}
+
+.btn-primary:hover {
+    color: #fff;
+    background-color: #989898;
+    border-color: #989898;
+}
+.table-responsive{
+  max-width: 600px;
+}
+
+.label{
+  font-size: .75em;
+   font-family: 'Roboto', sans-serif;
+}
+
+.axis-label{
+  font-size: 1.2em;
+   font-family: 'Roboto', sans-serif;
+}
+.btn-primary:focus {
+    color: #fff;
+    background-color: #989898;
+    border-color: #989898;
+}
+
+.btn-primary:not(:disabled):not(.disabled).active, .btn-primary:not(:disabled):not(.disabled):active, .show>.btn-primary.dropdown-toggle {
+    color: #fff;
+    background-color: #989898;
+    border-color: #989898;
+}
+
+
+
+.border-right {
+    border-right: 1px solid #dee2e6!important;
 }
 
 #sidebar-wrapper {
@@ -15,6 +66,8 @@ body {
   -o-transition: margin .25s ease-out;
   transition: margin .25s ease-out;
 }
+
+
 
 #sidebar-wrapper .sidebar-heading {
   padding: 0.875rem 1.25rem;
