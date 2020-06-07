@@ -13,8 +13,9 @@ output: html_document
   #install.packages("geojsonio")
   install.packages("curl")
 install.packages("digest")
+install.packages("googlesheets4")
   
-  devtools::install_github("tidyverse/googlesheets4")
+  #devtools::install_github("tidyverse/googlesheets4")
 library(googlesheets4)
 library(formattable)
 library(kableExtra)
