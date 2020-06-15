@@ -161,7 +161,7 @@
 // set the dimensions and margins of the graph
 var margin = {top: 10, right: 30, bottom: 40, left: 80},
     width = 400 - margin.left - margin.right,
-    height = 350 - margin.top - margin.bottom;
+    height = 380 - margin.top - margin.bottom;
 
 // append the svg object to the body of the page
 var svg = d3.select("#my_dataviz")
@@ -185,7 +185,7 @@ data.sort(function(b, a) {
 
 // Add X axis
 var x = d3.scaleLinear()
-  .domain([-1.2, .7])
+  .domain([-1, .7])
   .range([ 0, width]);
 svg.append("g")
   .attr("transform", "translate(0," + height + ")")
